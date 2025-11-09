@@ -1,0 +1,34 @@
+name: Multi-Platform Matrix Build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        node-version: [14, 16, 18]  # at least 3 versions
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: matrix-edced7e
+        run: echo "Building for Node version ${{ matrix.node-version }}"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Generate build artifact
+        run: echo "Build output for Node version ${{ matrix.node-version }}" > output-${{ matrix.node-version }}.txt
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-edced7e-v${{ matrix.node-version }}
+          path: output-${{ matrix.node-version }}.txt
